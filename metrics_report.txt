@@ -1,0 +1,39 @@
+=== Docker Container Metrics ===
+Collection time: Sat Dec 13 00:19:01     2025
+================================
+CONTAINER ID   NAME            CPU %     MEM USAGE / LIMIT     MEM %     NET I/O         BLOCK I/O        PIDS
+b0bfe87bac08   final-project   0.00%     11.17MiB / 6.698GiB   0.16%     4.99kB / 13kB   7.18MB / 4.1kB   13
+
+=== Container Details ===
+NAMES                 STATUS                      PORTS
+final-project         Up 4 minutes                0.0.0.0:8080->80/tcp, [::]:8080->80/tcp
+my-html-site          Created                     
+projet_gl_container   Exited (137) 2 hours ago    
+zealous_leavitt       Exited (0) 25 hours ago     
+projet_gl             Exited (0) 2 hours ago      
+festive_archimedes    Exited (137) 25 hours ago   
+vigilant_einstein     Exited (255) 2 days ago     80/tcp
+blissful_dirac        Exited (0) 9 days ago       
+beautiful_merkle      Exited (0) 9 days ago       
+web2                  Exited (255) 2 weeks ago    80/tcp
+web1                  Exited (255) 2 weeks ago    80/tcp
+goofy_roentgen        Exited (255) 2 weeks ago    0.0.0.0:8082->80/tcp
+infallible_sinoussi   Created                     
+distracted_wilbur     Created                     
+cool_cannon           Created                     
+jolly_jones           Created                     
+elegant_banach        Exited (255) 2 weeks ago    0.0.0.0:8081->80/tcp
+funny_blackwell       Created                     
+elated_lederberg      Created                     
+determined_hamilton   Created                     
+loving_germain        Created                     
+hopeful_sinoussi      Exited (255) 2 weeks ago    0.0.0.0:8080->80/tcp
+nostalgic_mclaren     Exited (137) 4 weeks ago    
+eager_perlman         Exited (0) 4 weeks ago      
+
+=== Disk Usage ===
+TYPE            TOTAL     ACTIVE    SIZE      RECLAIMABLE
+Images          7         7         539.2MB   254.4MB (47%)
+Containers      24        1         23.97MB   23.89MB (99%)
+Local Volumes   0         0         0B        0B
+Build Cache     39        0         16.91MB   16.91MB
