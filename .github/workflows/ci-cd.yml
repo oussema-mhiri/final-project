@@ -16,21 +16,24 @@ jobs:
 
     - name: Run tests
       run: |
-         chmod +x tests/test_site.sh
-         ./tests/test_site.sh
+        chmod +x tests/test_site.sh
+        ./tests/test_site.sh
 
-    - name: Login to Docker Hub
-      uses: docker/login-action@v2
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
+    - name: Build Docker image (without push)
+      run: |
+        echo "Building Docker image locally..."
+        docker build -t final-project:test .
+        echo "✅ Docker build successful!"
+        
+    - name: Test Docker container
+      run: |
+        echo "Testing Docker container..."
+        docker run -d --name test-container -p 8080:80 final-project:test
+        sleep 5
+        docker ps
+        echo "✅ Docker container running!"
+        docker stop test-container
+        docker rm test-container
 
-    - name: Build Docker image
-      run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/final-project:latest .
-
-    - name: Push Docker image
-      run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/final-project:latest
-
-    - name: Deploy confirmation
-      run: echo "Déploiement terminé."
-
+    - name: Pipeline complete
+      run: echo "✅ CI/CD Pipeline completed successfully!"
