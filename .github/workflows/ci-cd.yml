@@ -31,3 +31,7 @@ jobs:
 
     - name: Deploy confirmation
       run: echo "Déploiement terminé."
+    - name: Run tests
+      run: |
+        chmod +x tests/test_site.sh
+        ./tests/test_site.sh
