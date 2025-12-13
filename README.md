@@ -204,73 +204,8 @@ Multi-environment deployment
 MIT License
 
 👤 Author
-Oussema Mhiri - DevOps Project Implementation
+Oussama Mhiri - DevOps Project Implementation
 
 📧 Contact
 For questions or feedback, please open an issue in the repository.
 
-text
-
-### **2. Take Required Screenshots**
-Create `screenshots/` folder with:
-1. **Green CI/CD pipeline** (GitHub Actions)
-2. **Monitoring dashboard** working in browser
-3. **Docker containers** running (`docker ps` output)
-4. **Website** working (`http://localhost:8080`)
-5. **Project structure** in VS Code
-
-### **3. Create Final Report PDF**
-Combine:
-- README.md content
-- Screenshots
-- Code snippets
-- Architecture diagram
-- Challenges faced
-- Learning outcomes
-
-### **4. Push Everything to GitHub**
-```bash
-# Add all files
-git add README.md monitoring.html collect_metrics.sh
-
-# Commit
-git commit -m "Complete project: Final documentation and monitoring"
-
-# Push
-git push origin main
-🎯 Immediate Tasks:
-Task 1: Create README.md
-bash
-# Create README.md with the content above
-cat > README.md << 'EOF'
-# 🚗 Car Rental Website - DevOps Project
-[Paste the full README content here]
-EOF
-Task 2: Take Screenshots
-Take these 5 screenshots now.
-
-Task 3: Create Final Structure
-text
-final-project/
-├── README.md                 # ← Your documentation
-├── monitoring.html           # ← Dashboard
-├── collect_metrics.sh       # ← Metrics script
-├── screenshots/             # ← Folder for images
-│   ├── pipeline.png
-│   ├── dashboard.png
-│   ├── docker.png
-│   └── website.png
-└── [other project files]
-Task 4: Final Git Push
-bash
-# Make sure everything is committed
-git status
-
-# Add all
-git add .
-
-# Final commit
-git commit -m "DevOps Project Complete: All phases implemented"
-
-# Push
-git push origin main
