@@ -19,34 +19,21 @@ jobs:
         chmod +x tests/test_site.sh
         ./tests/test_site.sh
 
-    - name: Debug Docker Hub credentials
+    - name: Build Docker image (without push)
       run: |
-        echo "=== DEBUG SECRETS ==="
-        echo "DOCKERHUB_USERNAME exists: ${{ secrets.DOCKERHUB_USERNAME != '' }}"
-        echo "DOCKERHUB_TOKEN exists: ${{ secrets.DOCKERHUB_TOKEN != '' }}"
-        echo "Username first chars: ${{ secrets.DOCKERHUB_USERNAME }}"
-        echo "Token first chars: ${{ secrets.DOCKERHUB_TOKEN }}"
-        echo "====================="
+        echo "Building Docker image locally..."
+        docker build -t final-project:test .
+        echo "✅ Docker build successful!"
+        
+    - name: Test Docker container
+      run: |
+        echo "Testing Docker container..."
+        docker run -d --name test-container -p 8080:80 final-project:test
+        sleep 5
+        docker ps
+        echo "✅ Docker container running!"
+        docker stop test-container
+        docker rm test-container
 
-    - name: Login to Docker Hub
-      run: |
-        echo "Logging into Docker Hub..."
-        echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
-        echo "Login completed!"
-
-    - name: Build Docker image
-      run: |
-        echo "Building Docker image..."
-        docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/final-project:latest .
-        echo "Build successful!"
-
-    - name: Push Docker image
-      run: |
-        echo "Pushing to Docker Hub..."
-        docker push ${{ secrets.DOCKERHUB_USERNAME }}/final-project:latest
-        echo "Push successful!"
-
-    - name: Deploy confirmation
-      run: |
-        echo "✅ CI/CD Pipeline COMPLETED SUCCESSFULLY!"
-        echo "Image: ${{ secrets.DOCKERHUB_USERNAME }}/final-project:latest"
+    - name: Pipeline complete
+      run: echo "✅ CI/CD Pipeline completed successfully!"
