@@ -116,7 +116,7 @@ markdown
 <img width="1168" height="62" alt="Capture d’écran 2025-12-12 225156" src="https://github.com/user-attachments/assets/231f5165-893b-4158-9b28-1285c14a4135" />
 
 ### Website Live
-![Uploading Capture d’écran 2025-12-13 083152.png…]()
+<img width="3821" height="1958" alt="Capture d’écran 2025-12-13 083152" src="https://github.com/user-attachments/assets/7e16effc-6bbb-40bf-86ed-cb9427c73901" />
 
 7. Future Improvements
 markdown
