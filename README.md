@@ -15,8 +15,6 @@ markdown
 ## 🏗️ Architecture
 [Static Website] → [Docker Container] → [CI/CD Pipeline] → [Monitoring Dashboard]
 
-text
-
 ### Technology Stack:
 - **Frontend**: HTML5, CSS3, JavaScript
 - **Containerization**: Docker, Docker Compose
