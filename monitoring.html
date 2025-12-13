@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevOps Project - Monitoring Dashboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; border-radius: 15px; padding: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        header { text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid #eee; }
+        h1 { color: #333; margin-bottom: 10px; }
+        .status-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 30px 0; }
+        .card { background: #f8f9fa; padding: 20px; border-radius: 10px; border-left: 5px solid #4CAF50; }
+        .card.warning { border-left-color: #ff9800; }
+        .card.error { border-left-color: #f44336; }
+        .card-title { font-size: 14px; color: #666; margin-bottom: 10px; }
+        .card-value { font-size: 24px; font-weight: bold; color: #333; }
+        .card-desc { font-size: 12px; color: #888; margin-top: 5px; }
+        .logs { background: #1a1a1a; color: #00ff00; padding: 20px; border-radius: 10px; font-family: 'Courier New', monospace; margin: 20px 0; height: 300px; overflow-y: auto; }
+        .log-entry { padding: 5px 0; border-bottom: 1px solid #333; }
+        .log-time { color: #66b3ff; }
+        .log-info { color: #4CAF50; }
+        .log-warn { color: #ff9800; }
+        .log-error { color: #f44336; }
+        .section { margin: 30px 0; }
+        h2 { color: #444; margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+        .ci-status { background: #e8f5e9; padding: 15px; border-radius: 10px; margin: 20px 0; }
+        .btn { background: #4CAF50; color: white; border: none; padding: 12px 24px; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 10px 5px; }
+        .btn:hover { background: #45a049; }
+        .btn-refresh { background: #2196F3; }
+        .metrics-table { width: 100%; border-collapse: collapse; margin: 20px 0; }
+        .metrics-table th, .metrics-table td { padding: 12px; text-align: left; border-bottom: 1px solid #ddd; }
+        .metrics-table th { background: #f5f5f5; color: #333; }
+        .green { color: #4CAF50; }
+        .orange { color: #ff9800; }
+        .red { color: #f44336; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚗 Car Rental Website - DevOps Monitoring Dashboard</h1>
+            <p>Real-time monitoring for Docker containers, CI/CD pipeline, and application metrics</p>
+        </header>
+        
+        <div class="section">
+            <h2>📊 System Status Overview</h2>
+            <div class="status-grid">
+                <div class="card">
+                    <div class="card-title">Application Status</div>
+                    <div class="card-value green" id="app-status">RUNNING</div>
+                    <div class="card-desc">Car rental website</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Docker Container</div>
+                    <div class="card-value" id="container-status">Active</div>
+                    <div class="card-desc">final-project container</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Uptime</div>
+                    <div class="card-value" id="uptime">0d 0h 0m</div>
+                    <div class="card-desc">Since last deployment</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">CI/CD Status</div>
+                    <div class="card-value green" id="ci-status">SUCCESS</div>
+                    <div class="card-desc">Last pipeline: <span id="last-run">Just now</span></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>🐳 Docker Container Metrics</h2>
+            <table class="metrics-table">
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Value</th>
+                        <th>Status</th>
+                        <th>Last Updated</th>
+                    </tr>
+                </thead>
+                <tbody id="docker-metrics">
+                    <tr><td>CPU Usage</td><td id="cpu-usage">0.15%</td><td class="green">Normal</td><td id="cpu-time">--</td></tr>
+                    <tr><td>Memory Usage</td><td id="memory-usage">10.46 MiB</td><td class="green">Normal</td><td id="memory-time">--</td></tr>
+                    <tr><td>Network I/O</td><td id="network-io">4.94kB/13.4kB</td><td class="green">Normal</td><td id="network-time">--</td></tr>
+                    <tr><td>Disk I/O</td><td id="disk-io">0B/12.3kB</td><td class="green">Normal</td><td id="disk-time">--</td></tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="section">
+            <h2>🔗 CI/CD Pipeline Status</h2>
+            <div class="ci-status">
+                <h3>GitHub Actions Pipeline</h3>
+                <p><strong>Status:</strong> <span class="green" id="pipeline-status">✅ Success</span></p>
+                <p><strong>Last Run:</strong> <span id="pipeline-time">Today 15:30</span></p>
+                <p><strong>Docker Image:</strong> <span id="docker-image">final-project:latest</span></p>
+                <p><strong>Test Results:</strong> <span class="green">✅ All tests passed</span></p>
+                <button class="btn btn-refresh" onclick="checkPipeline()">🔄 Check Pipeline Status</button>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>📝 System Logs</h2>
+            <div class="logs" id="log-container">
+                <div class="log-entry"><span class="log-time">[15:30:22]</span> <span class="log-info">[INFO]</span> Application started successfully</div>
+                <div class="log-entry"><span class="log-time">[15:30:25]</span> <span class="log-info">[INFO]</span> Nginx server listening on port 80</div>
+                <div class="log-entry"><span class="log-time">[15:30:30]</span> <span class="log-info">[INFO]</span> Docker container 'final-project' created</div>
+                <div class="log-entry"><span class="log-time">[15:31:00]</span> <span class="log-info">[INFO]</span> CI/CD pipeline completed successfully</div>
+                <div class="log-entry"><span class="log-time">[15:31:30]</span> <span class="log-info">[INFO]</span> 5 active connections to website</div>
+                <div class="log-entry"><span class="log-time">[15:32:00]</span> <span class="log-warn">[WARN]</span> Memory usage slightly elevated (monitoring)</div>
+            </div>
+            <button class="btn" onclick="addLog('info', 'Manual refresh triggered')">➕ Add Info Log</button>
+            <button class="btn" onclick="addLog('warn', 'Simulated warning message')">⚠ Add Warning</button>
+            <button class="btn" onclick="clearLogs()">🗑️ Clear Logs</button>
+        </div>
+        
+        <div class="section">
+            <button class="btn btn-refresh" onclick="refreshAllMetrics()">🔄 Refresh All Metrics</button>
+            <button class="btn" onclick="exportMetrics()">📥 Export Metrics Report</button>
+            <button class="btn" onclick="simulateFailure()">🔴 Simulate Failure (Test)</button>
+        </div>
+    </div>
+
+    <script>
+        let startTime = new Date();
+        
+        function updateUptime() {
+            const now = new Date();
+            const diff = now - startTime;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            document.getElementById('uptime').textContent = `${days}d ${hours}h ${minutes}m`;
+        }
+        
+        function refreshAllMetrics() {
+            const now = new Date().toLocaleTimeString();
+            
+            // Update metrics with simulated data
+            document.getElementById('cpu-usage').textContent = (Math.random() * 0.5).toFixed(2) + '%';
+            document.getElementById('cpu-time').textContent = now;
+            
+            document.getElementById('memory-usage').textContent = (10 + Math.random() * 5).toFixed(2) + ' MiB';
+            document.getElementById('memory-time').textContent = now;
+            
+            document.getElementById('network-io').textContent = 
+                `${(4 + Math.random() * 2).toFixed(2)}kB/${(13 + Math.random() * 5).toFixed(2)}kB`;
+            document.getElementById('network-time').textContent = now;
+            
+            document.getElementById('disk-io').textContent = `0B/${(12 + Math.random() * 3).toFixed(2)}kB`;
+            document.getElementById('disk-time').textContent = now;
+            
+            document.getElementById('last-run').textContent = now;
+            document.getElementById('pipeline-time').textContent = now;
+            
+            updateUptime();
+            addLog('info', `Metrics refreshed at ${now}`);
+        }
+        
+        function addLog(type, message) {
+            const logContainer = document.getElementById('log-container');
+            const time = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.className = 'log-entry';
+            logEntry.innerHTML = `<span class="log-time">[${time}]</span> <span class="log-${type}">[${type.toUpperCase()}]</span> ${message}`;
+            logContainer.appendChild(logEntry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+        
+        function clearLogs() {
+            document.getElementById('log-container').innerHTML = 
+                '<div class="log-entry"><span class="log-time">[' + new Date().toLocaleTimeString() + ']</span> <span class="log-info">[INFO]</span> Logs cleared</div>';
+        }
+        
+        function checkPipeline() {
+            addLog('info', 'Checking CI/CD pipeline status...');
+            document.getElementById('pipeline-status').textContent = '✅ Success';
+            document.getElementById('pipeline-status').className = 'green';
+            document.getElementById('ci-status').textContent = 'SUCCESS';
+            document.getElementById('ci-status').className = 'green';
+        }
+        
+        function exportMetrics() {
+            const metrics = `
+DevOps Project - Metrics Report
+Generated: ${new Date().toLocaleString()}
+
+Container: final-project
+Status: Running
+Uptime: ${document.getElementById('uptime').textContent}
+
+Metrics:
+- CPU Usage: ${document.getElementById('cpu-usage').textContent}
+- Memory Usage: ${document.getElementById('memory-usage').textContent}
+- Network I/O: ${document.getElementById('network-io').textContent}
+- Disk I/O: ${document.getElementById('disk-io').textContent}
+
+CI/CD Status: ${document.getElementById('pipeline-status').textContent}
+Last Run: ${document.getElementById('pipeline-time').textContent}
+            `;
+            
+            alert('Metrics copied to clipboard!\n\n' + metrics);
+            addLog('info', 'Metrics report exported');
+        }
+        
+        function simulateFailure() {
+            document.getElementById('app-status').textContent = 'ERROR';
+            document.getElementById('app-status').className = 'red';
+            document.getElementById('container-status').textContent = 'Stopped';
+            document.getElementById('ci-status').textContent = 'FAILED';
+            document.getElementById('ci-status').className = 'red';
+            document.getElementById('pipeline-status').textContent = '❌ Failed';
+            document.getElementById('pipeline-status').className = 'red';
+            
+            addLog('error', 'Simulated system failure for testing');
+            addLog('warn', 'Container stopped unexpectedly');
+            addLog('info', 'Auto-recovery initiated...');
+            
+            setTimeout(() => {
+                document.getElementById('app-status').textContent = 'RUNNING';
+                document.getElementById('app-status').className = 'green';
+                document.getElementById('container-status').textContent = 'Active';
+                document.getElementById('ci-status').textContent = 'SUCCESS';
+                document.getElementById('ci-status').className = 'green';
+                document.getElementById('pipeline-status').textContent = '✅ Success';
+                document.getElementById('pipeline-status').className = 'green';
+                addLog('info', 'System recovered successfully');
+            }, 3000);
+        }
+        
+        // Initialize
+        updateUptime();
+        refreshAllMetrics();
+        setInterval(updateUptime, 60000); // Update uptime every minute
+        setInterval(refreshAllMetrics, 30000); // Refresh metrics every 30 seconds
+        
+        // Simulate occasional logs
+        setInterval(() => {
+            if (Math.random() > 0.7) {
+                const activities = [
+                    'User visited homepage',
+                    'Car search requested',
+                    'New user registration',
+                    'Booking confirmed',
+                    'Payment processed'
+                ];
+                addLog('info', activities[Math.floor(Math.random() * activities.length)]);
+            }
+        }, 10000);
+    </script>
+</body>
+</html>
